@@ -1,0 +1,30 @@
+```{r}
+library(readxl)
+data_tubes <- read_excel("D:/statmul/data tubes.xlsx")
+View(data_tubes)
+```
+
+#normalisasi
+
+```{r}
+l<- data_tubes[,-c(1,1)];l
+m<- apply(l,2,mean)
+s<- apply(l,2,sd)
+ 
+z<-scale(l,m,s);z
+```
+
+scree plot
+```{r}
+wss<-(nrow(z)-1)*sum(apply(z,2,var))
+for (i in 2:20) wss[i]<- sum(kmeans(z,centers=i)$withinss)
+plot(1:20,wss,type = "b",xlab = "Number of Clusters", ylab="Within group sum of square")
+```
+
+
+k-mean clustering
+```{r}
+kc<- kmeans(z,3)
+kc
+```
+

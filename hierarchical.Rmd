@@ -1,0 +1,54 @@
+```{r}
+library(readxl)
+data_tubes <- read_excel("D:/statmul/data tubes.xlsx")
+View(data_tubes)
+```
+
+#normalisasi
+```{r}
+l<- data_tubes[,-c(1,1)];l
+m<- apply(l,2,mean)
+s<- apply(l,2,sd)
+ 
+z<-scale(l,m,s);z
+```
+
+#calculating euclidean distance
+```{r}
+distance<-dist(z)
+print(distance,digits=3)
+```
+
+Hierarchical Clustering Using Dendogram
+
+Complete Linkage
+-----------------
+
+```{r}
+hc.c<-hclust(distance)
+plot(hc.c, labels=data_tubes$Provinsi,cex=.7)
+```
+
+Average linkage
+```{r}
+hc.a<- hclust(distance, method = "average")
+hc.a
+plot(hc.a, labels=data_tubes$Provinsi,cex=.7)
+```
+
+Cluster membership
+```{r}
+member.c<-cutree(hc.c,3)
+member.a<-cutree(hc.a,3)
+table(member.c,member.a)
+```
+
+Cluster mean
+```{r}
+t<-aggregate(data_tubes[,-c(1,1)],list(member.c),mean);t
+u<-aggregate(data_tubes[,-c(1,1)],list(member.a),mean);u
+```
+
+
+
+
